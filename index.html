@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>BÁC SĨ DA LIỄU VIỆT HOA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400;500;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #00bcd4 0%, #009688 100%);
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* ===== HEADER ===== */
+.app-header {
+    height: 35vh;
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.3),
+            rgba(0, 0, 0, 0.5)
+        ),
+        url("images/header-bg.jpg") center/cover no-repeat;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+    border-bottom-left-radius: 32px;
+    border-bottom-right-radius: 32px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* TEXT */
+.app-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    text-align: center;
+    letter-spacing: 1.5px;
+    line-height: 1.2;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.app-header p {
+    margin-top: 8px;
+    font-size: 16px;
+    opacity: 0.9;
+    text-align: center;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* LOGO */
+.logo {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+}
+
+.logo img {
+    width: 70px;
+    border-radius: 50%;
+    background: none;
+    padding: 0;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+    transition: transform 0.2s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.05);
+}
+
+/* ===== SUBHEADER ===== */
+.app-subheader {
+    padding: 10px 20px;
+    text-align: center;
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.9);
+    margin: 0 auto;
+    max-width: 400px;
+    width: 100%;
+    border-radius: 16px;
+    margin-top: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== CONTENT ===== */
+.app-content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* CARD */
+.app-card {
+    flex: 1;
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    border-radius: 24px;
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.app-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 188, 212, 0.1), rgba(0, 150, 136, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.app-card:hover::before {
+    opacity: 1;
+}
+
+/* IMAGE */
+.app-card img {
+    width: 90%;
+    height: 70%;
+    object-fit: cover;
+    border-radius: 18px;
+    transition: transform 0.3s ease;
+}
+
+.app-card:hover img {
+    transform: scale(1.05);
+}
+
+/* TEXT */
+.app-card span {
+    margin-top: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #555;
+    transition: color 0.3s ease;
+    text-transform: uppercase;
+}
+
+.app-card:hover span {
+    color: #00bcd4;
+}
+
+/* PRESS EFFECT */
+.app-card:active {
+    transform: scale(0.95);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* MOBILE OPTIMIZATIONS */
+@media (max-width: 480px) {
+    .app-header {
+        height: 30vh;
+        padding: 16px;
+    }
+    
+    .app-header h1 {
+        font-size: 28px;
+    }
+    
+    .app-header p {
+        font-size: 14px;
+    }
+    
+    .logo img {
+        width: 60px;
+    }
+    
+    .app-subheader {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    
+    .app-content {
+        padding: 16px;
+        gap: 16px;
+    }
+    
+    .app-card span {
+        font-size: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="app-header">
+    <h1>BÁC SĨ DA LIỄU<br><span style="color: #FFD700;">VIỆT HOA</span></h1>
+    <p>CHĂM SÓC VẺ ĐẸP TỰ NHIÊN</p>
+
+    <div class="logo">
+        <img src="images/logo.png" alt="Logo">
+    </div>
+</div>
+
+<!-- SUBHEADER -->
+<div class="app-subheader">
+    VUI LÒNG LỰA CHỌN THÔNG TIN
+</div>
+
+<!-- CONTENT -->
+<div class="app-content">
+
+    <a href="da.html" class="app-card">
+        <img src="images/da.jpg" alt="DA">
+        <span>DA</span>
+    </a>
+
+    <a href="toc.html" class="app-card">
+        <img src="images/toc.jfif" alt="TÓC">
+        <span>TÓC</span>
+    </a>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>THÔNG TIN TÓC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&family=Montserrat:wght@500;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 50%, #a5d6a7 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* LOGO */
+        .logo {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .logo img {
+            width: 70px;
+            border-radius: 50%;
+            background: none;
+            padding: 0;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .logo img:hover {
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 480px;
+            margin: auto;
+            padding: 16px 14px 40px;
+            padding-top: 80px;
+            /* Để tránh logo */
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #388e3c 0%, #4caf50 50%, #66bb6a 100%);
+            color: white;
+            text-align: center;
+            padding: 28px 24px;
+            border-radius: 28px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.2);
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .header h2 {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* SECTION */
+        .section {
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            margin-top: 28px;
+            padding: 24px;
+            border-radius: 24px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(56, 142, 60, 0.1);
+        }
+
+        .section:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.18);
+        }
+
+        .section h3 {
+            margin: 0 0 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            color: #2e7d32;
+            border-left: 6px solid #4caf50;
+            padding-left: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* FORM */
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #37474f;
+            transition: color 0.3s ease;
+        }
+
+        textarea,
+        input {
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            border: 2px solid #e0e0e0;
+            font-size: 16px;
+            background: linear-gradient(145deg, #fafafa 0%, #ffffff 100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        textarea:focus,
+        input:focus {
+            outline: none;
+            border-color: #4caf50;
+            background: #ffffff;
+            box-shadow: 0 0 12px rgba(76, 175, 80, 0.4), inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            transform: scale(1.02);
+        }
+
+        /* BUTTON */
+        button {
+            width: 100%;
+            margin-top: 36px;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #388e3c 0%, #4caf50 50%, #66bb6a 100%);
+            color: white;
+            border: none;
+            border-radius: 24px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* MOBILE OPTIMIZATIONS */
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px 10px 30px;
+                padding-top: 70px;
+            }
+
+            .header {
+                padding: 24px 18px;
+                border-radius: 24px;
+            }
+
+            .header h2 {
+                font-size: 22px;
+            }
+
+            .section {
+                padding: 20px;
+                margin-top: 24px;
+                border-radius: 20px;
+            }
+
+            .section h3 {
+                font-size: 18px;
+            }
+
+            label {
+                font-size: 15px;
+            }
+
+            textarea,
+            input {
+                padding: 14px;
+                font-size: 15px;
+            }
+
+            button {
+                padding: 18px;
+                font-size: 17px;
+            }
+
+            .logo img {
+                width: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="logo">
+        <img src="images/logo.png" alt="Logo">
+    </div>
+
+    <div class="container">
+
+        <div class="header">
+            <h2>THÔNG TIN KHÁCH HÀNG – TÓC</h2>
+        </div>
+
+        <div class="section">
+            <h3>I. THÔNG TIN CHUNG</h3>
+            <p class="chu-thich">
+                (*) CÁC MỤC ĐÁNH DẤU SAO LÀ BẮT BUỘC PHẢI ĐIỀN
+            </p>
+
+            <label class="bat-buoc-label">
+                1. Họ và tên – Tuổi <span class="sao">*</span>
+            </label>
+            <textarea id="q1" class="bat-buoc" placeholder="Ví dụ: Nguyễn Văn A – 28 tuổi"></textarea>
+            <small class="note-bat-buoc">Thông tin bắt buộc</small>
+
+            <label>2. Nghề nghiệp hiện tại (kể cả công việc làm thêm)</label>
+            <textarea id="q2"></textarea>
+
+            <label class="bat-buoc-label">
+                3. Số điện thoại liên hệ <span class="sao">*</span>
+            </label>
+            <textarea id="q3" class="bat-buoc" placeholder="09xxxxxxxx"></textarea>
+            <small class="note-bat-buoc">Thông tin bắt buộc</small>
+
+            <label class="bat-buoc-label">
+                4. Ngày tháng năm sinh <span class="sao">*</span>
+            </label>
+            <textarea id="q4" class="bat-buoc"></textarea>
+            <small class="note-bat-buoc">Thông tin bắt buộc</small>
+            <label>5. Địa chỉ thường trú</label>
+            <textarea id="q5"></textarea>
+
+            <label>6. Lý do đi khám tóc / da đầu</label>
+            <textarea id="q6" placeholder="Rụng tóc, hói đầu, ngứa da đầu..."></textarea>
+
+            <label>7. Có mang thai / cho con bú / dự định mang thai trong 6 tháng?</label>
+            <textarea id="q7"></textarea>
+
+            <label>8. Có bệnh buồng trứng đa nang hoặc tuyến giáp không?</label>
+            <textarea id="q8"></textarea>
+
+            <label>9. Có mất ngủ hoặc tiền sử bệnh tâm thần kinh vd: trầm cảm, lo âu?</label>
+            <textarea id="q9"></textarea>
+
+            <label>10. Hiện tại có mắc bệnh gì không, có đang uống thuốc điều trị bệnh nào không?</label>
+            <textarea id="q10"></textarea>
+
+            <label>11. Có bệnh lý về máu, thiếu máu, máu chảy không đông không?</label>
+            <textarea id="q11" placeholder="Chảy máu răng, đi cầu ra máu, rong kinh, xuất huyết dưới da,..."></textarea>
+
+            <label>12. Có rối loạn chức năng gan - thận - mỡ máu - đường máu không?</label>
+            <textarea id="q12"></textarea>
+
+            <label>13. Trong gia đình có ai mắc bệnh giống mình không?</label>
+            <textarea id="q13"></textarea>
+
+            <label>14. Trước đây hoặc hiện tại có dùng thuốc bổ không?</label>
+            <textarea id="q14" placeholder="Kẽm, sắt, vitamin,...."></textarea>
+
+            <label>15. Có thường xuyên ăn nhiều đồ ngọt, béo, sữa và các chế phẩm từ sữa không?</label>
+            <textarea id="q15"></textarea>
+
+            <label>16. Có hay tnức khuya, stress, chất kích thích, vd: rượu bia, thuốc lá?</label>
+            <textarea id="q16"></textarea>
+
+            <label>17. Có sử dụng bột tăng cơ / thực phẩm thể hình trước đây hoặc hiện tại không?</label>
+            <textarea id="q17"></textarea>
+
+            <label>18. Đã từng điều trị tóc / da đầu chưa? [điều trị bao nhiêu đợt, mỗi đợt thời gian bao lâu]. Hiện tại
+                đang điều trị hay ngừng [nếu đã ngừng thì ngừng bao lâu]?</label>
+            <textarea id="q18"></textarea>
+        </div>
+
+        <div class="section">
+            <h3>II. KHÁM (KHÁCH HÀNG TỰ TRẢ LỜI)</h3>
+
+            <label>19. Da đầu có ngứa không? [vị trí ngứa, ngứa ban ngày hay ban đêm, xuất hiện bao lâu]</label>
+            <textarea id="q19"></textarea>
+
+            <label>20. Da đầu có đau, bỏng rát không?</label>
+            <textarea id="q20"></textarea>
+
+            <label>21. Da đầu có gàu hoặc khô, bong tróc không?</label>
+            <textarea id="q21"></textarea>
+
+            <label>22. Vị trí rụng tóc, rụng nhiều ở vùng nào, rụng theo mảng hay xen kẽ?</label>
+            <textarea id="q22"></textarea>
+
+            <label>23. Mức độ rụng tóc ít hay nhiều?</label>
+            <textarea id="q23"></textarea>
+
+            <label>24. Có vuốt, kéo tóc hoặc đội mũ thường xuyên không?</label>
+            <textarea id="q24"></textarea>
+
+            <label>25. Có theo chế độ ăn kiêng hoặc kiêng thực phẩm nào không?</label>
+            <textarea id="q25"></textarea>
+        </div>
+
+        <button onclick="kiemTraVaTaoAnh('TÓC')">TẠO ẢNH</button>
+
+        <button onclick="xoaDuLieu()">XOÁ THÔNG TIN</button>
+
+    </div>
+
+    <canvas id="canvas" width="1080" height="1600" hidden></canvas>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
