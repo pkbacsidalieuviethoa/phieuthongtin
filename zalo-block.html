@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>MỞ TRÌNH DUYỆT</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    background: #0d47a1;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.box {
+    background: white;
+    color: #222;
+    border-radius: 20px;
+    padding: 24px;
+    text-align: center;
+    width: 90%;
+    max-width: 360px;
+}
+
+.box h1 {
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.box p {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.open-btn {
+    display: block;
+    background: #1976d2;
+    color: white;
+    padding: 14px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h1>⚠️ CẦN MỞ TRÌNH DUYỆT</h1>
+    <p>
+        VUI LÒNG MỞ TRANG NÀY<br>
+        BẰNG <b>CHROME / SAFARI</b><br><br>
+        NHẤN NÚT BÊN DƯỚI
+    </p>
+
+    <a class="open-btn" onclick="openBrowser()">MỞ TRÌNH DUYỆT</a>
+</div>
+
+<script>
+function openBrowser() {
+    var url = sessionStorage.getItem("redirect_after_browser");
+    if (!url) url = "/";
+    location.href = url;
+}
+</script>
+
+</body>
+</html>
