@@ -2,54 +2,54 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>MỞ TRÌNH DUYỆT</title>
+<title>MỞ TRONG TRÌNH DUYỆT</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f2f6ff;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f2f4f6;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     min-height: 100vh;
 }
 
 .box {
     background: white;
-    border-radius: 20px;
+    max-width: 380px;
+    width: 92%;
     padding: 24px;
-    width: 90%;
-    max-width: 360px;
+    border-radius: 16px;
     text-align: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
 }
 
-.logo {
-    width: 80px;
-    margin-bottom: 16px;
+.box h2 {
+    color: #0057ff;
+    margin-bottom: 12px;
 }
 
-h2 {
-    margin: 10px 0 8px;
-    font-size: 20px;
-}
-
-p {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 20px;
-}
-
-.open-btn {
-    display: block;
-    background: #1a73e8;
-    color: white;
-    padding: 14px 18px;
-    border-radius: 12px;
-    text-decoration: none;
+.box p {
     font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 18px;
+}
+
+.steps {
+    text-align: left;
+    font-size: 15px;
+}
+
+.steps li {
+    margin-bottom: 10px;
+}
+
+.note {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #d32f2f;
     font-weight: bold;
 }
 </style>
@@ -58,19 +58,34 @@ p {
 <body>
 
 <div class="box">
-    <img src="images/logo.png" class="logo" alt="Logo">
+    <h2>⚠️ CẦN MỞ TRONG TRÌNH DUYỆT</h2>
 
-    <h2>BÁC SĨ DA LIỄU VIỆT HOA</h2>
-    <p>ZALO KHÔNG HỖ TRỢ TẠO ẢNH.<br>VUI LÒNG MỞ BẰNG TRÌNH DUYỆT.</p>
+    <p>
+        Để tạo ảnh và sử dụng đầy đủ chức năng,<br>
+        vui lòng mở trang này bằng trình duyệt.
+    </p>
 
-    <!-- ⚠️ LINK PHẢI LÀ LINK PAGES THẬT -->
-    <a class="open-btn"
-       href="https://pkbacsidalieuviethoa.github.io/phieuthongtin/"
-       target="_blank"
-       rel="noopener">
-       🌐 MỞ TRONG TRÌNH DUYỆT
-    </a>
+    <ul class="steps">
+        <li>1️⃣ Bấm dấu <strong>⋮</strong> góc trên bên phải</li>
+        <li>2️⃣ Chọn <strong>“Mở bằng trình duyệt”</strong></li>
+        <li>3️⃣ Trang sẽ tự chuyển tiếp</li>
+    </ul>
+
+    <div class="note">
+        ❗ Không sử dụng trình duyệt Zalo
+    </div>
 </div>
+
+<script>
+(function () {
+    var ua = navigator.userAgent || navigator.vendor || window.opera;
+
+    // Nếu KHÔNG phải Zalo → tự vào index.html
+    if (!/Zalo/i.test(ua)) {
+        window.location.replace("index.html");
+    }
+})();
+</script>
 
 </body>
 </html>
