@@ -8,44 +8,49 @@
 <style>
 body {
     margin: 0;
-    background: #0d47a1;
-    color: white;
     font-family: Arial, sans-serif;
+    background: #f2f6ff;
     display: flex;
-    justify-content: center;
     align-items: center;
-    height: 100vh;
+    justify-content: center;
+    min-height: 100vh;
 }
 
 .box {
     background: white;
-    color: #222;
     border-radius: 20px;
     padding: 24px;
-    text-align: center;
     width: 90%;
     max-width: 360px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
 
-.box h1 {
+.logo {
+    width: 80px;
+    margin-bottom: 16px;
+}
+
+h2 {
+    margin: 10px 0 8px;
     font-size: 20px;
-    margin-bottom: 12px;
 }
 
-.box p {
+p {
     font-size: 14px;
+    color: #555;
     margin-bottom: 20px;
 }
 
 .open-btn {
     display: block;
-    background: #1976d2;
+    background: #1a73e8;
     color: white;
-    padding: 14px;
+    padding: 14px 18px;
     border-radius: 12px;
     text-decoration: none;
-    font-weight: bold;
     font-size: 16px;
+    font-weight: bold;
 }
 </style>
 </head>
@@ -53,23 +58,19 @@ body {
 <body>
 
 <div class="box">
-    <h1>⚠️ CẦN MỞ TRÌNH DUYỆT</h1>
-    <p>
-        VUI LÒNG MỞ TRANG NÀY<br>
-        BẰNG <b>CHROME / SAFARI</b><br><br>
-        NHẤN NÚT BÊN DƯỚI
-    </p>
+    <img src="images/logo.png" class="logo" alt="Logo">
 
-    <a class="open-btn" onclick="openBrowser()">MỞ TRÌNH DUYỆT</a>
+    <h2>BÁC SĨ DA LIỄU VIỆT HOA</h2>
+    <p>ZALO KHÔNG HỖ TRỢ TẠO ẢNH.<br>VUI LÒNG MỞ BẰNG TRÌNH DUYỆT.</p>
+
+    <!-- ⚠️ LINK PHẢI LÀ LINK PAGES THẬT -->
+    <a class="open-btn"
+       href="https://pkbacsidalieuviethoa.github.io/phieuthongtin/"
+       target="_blank"
+       rel="noopener">
+       🌐 MỞ TRONG TRÌNH DUYỆT
+    </a>
 </div>
-
-<script>
-function openBrowser() {
-    var url = sessionStorage.getItem("redirect_after_browser");
-    if (!url) url = "/";
-    location.href = url;
-}
-</script>
 
 </body>
 </html>
