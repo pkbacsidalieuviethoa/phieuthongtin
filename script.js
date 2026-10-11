@@ -1,3 +1,98 @@
+let anhDaTao = null;
+let duLieuAnhDaTao = null;
+let tenAnhDaTao = "";
+
+function hienThiTrangThaiAnh(thongBao) {
+    const trangThai = document.getElementById("image-status");
+    if (trangThai) {
+        trangThai.textContent = thongBao;
+        const imageActions = document.getElementById("image-actions");
+        if (imageActions) {
+            imageActions.hidden = false;
+        }
+    }
+}
+
+function kichHoatTaiAnh(fileName, imageUrl) {
+    const link = document.createElement("a");
+    link.download = fileName;
+    link.href = imageUrl;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+}
+
+function taoFileAnh(dataUrl, fileName) {
+    if (typeof File !== "function") {
+        return null;
+    }
+
+    const parts = dataUrl.split(",");
+    const mimeType = parts[0].match(/data:(.*?);base64/)[1];
+    const binary = atob(parts[1]);
+    const bytes = new Uint8Array(binary.length);
+
+    for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+
+    return new File([bytes], fileName, { type: mimeType });
+}
+
+function taiAnhDaTao() {
+    if (!duLieuAnhDaTao) {
+        hienThiTrangThaiAnh("Vui lòng tạo ảnh trước khi tải xuống.");
+        return;
+    }
+
+    const imageUrl = anhDaTao ? URL.createObjectURL(anhDaTao) : duLieuAnhDaTao;
+    kichHoatTaiAnh(tenAnhDaTao, imageUrl);
+    if (anhDaTao) {
+        window.setTimeout(() => URL.revokeObjectURL(imageUrl), 60000);
+    }
+    hienThiTrangThaiAnh("Đã yêu cầu tải ảnh xuống. Nếu trình duyệt không tải, hãy thử mở trang bằng trình duyệt của điện thoại.");
+}
+
+async function chiaSeAnh() {
+    if (!duLieuAnhDaTao) {
+        hienThiTrangThaiAnh("Vui lòng tạo ảnh trước khi chia sẻ.");
+        return;
+    }
+
+    let coTheChiaSeTep = false;
+    if (anhDaTao &&
+        typeof navigator.share === "function" &&
+        typeof navigator.canShare === "function") {
+        try {
+            coTheChiaSeTep = navigator.canShare({ files: [anhDaTao] });
+        } catch (error) {
+            coTheChiaSeTep = false;
+        }
+    }
+
+    if (!coTheChiaSeTep) {
+        taiAnhDaTao();
+        hienThiTrangThaiAnh("Trình duyệt này chưa hỗ trợ chia sẻ ảnh trực tiếp. Đã chuyển sang tải ảnh xuống.");
+        return;
+    }
+
+    try {
+        await navigator.share({
+            files: [anhDaTao],
+            title: "Phiếu thông tin khách hàng"
+        });
+        hienThiTrangThaiAnh("Đã mở bảng chia sẻ. Chọn Zalo, Messenger hoặc ứng dụng bạn muốn gửi ảnh.");
+    } catch (error) {
+        if (error && error.name === "AbortError") {
+            hienThiTrangThaiAnh("Đã hủy chia sẻ. Ảnh vẫn có thể tải xuống bằng nút bên dưới.");
+            return;
+        }
+
+        hienThiTrangThaiAnh("Không thể chia sẻ ảnh trong trình duyệt này. Đang chuyển sang tải ảnh xuống.");
+        taiAnhDaTao();
+    }
+}
+
 function taoAnh(loai) {
 
     const cauHoi = {
@@ -143,13 +238,22 @@ function taoAnh(loai) {
         }
 
         const imgData = canvas.toDataURL("image/png");
-        localStorage.setItem("anhCuoi", imgData);
+        duLieuAnhDaTao = imgData;
+        tenAnhDaTao = "Thong_tin_" + loai + ".png";
+        anhDaTao = taoFileAnh(imgData, tenAnhDaTao);
 
-        const link = document.createElement("a");
-        link.download = "Thong_tin_" + loai + ".png";
-        link.href = imgData;
-        link.click();
+        const imageActions = document.getElementById("image-actions");
+        if (imageActions) {
+            imageActions.hidden = false;
+        }
 
+        kichHoatTaiAnh(tenAnhDaTao, imgData);
+        hienThiTrangThaiAnh("Đã tạo ảnh. Nếu chưa thấy ảnh tải xuống, hãy dùng nút TẢI ẢNH XUỐNG hoặc CHIA SẺ ẢNH.");
+
+    };
+
+    logo.onerror = function () {
+        hienThiTrangThaiAnh("Không tải được logo nên chưa thể tạo ảnh. Vui lòng tải lại trang và thử lại.");
     };
 }
 
@@ -218,12 +322,6 @@ window.addEventListener("load", () => {
         }
     });
     
-    const anhDaTao = localStorage.getItem("anhCuoi");
-    if (anhDaTao) {
-        document.getElementById("anh-ket-qua").src = anhDaTao;
-        document.getElementById("ket-qua-anh").style.display = "block";
-        document.getElementById("nut-tao-anh").innerText = "TẠO LẠI ẢNH";
-    }
 });
 
 function xoaDuLieu() {

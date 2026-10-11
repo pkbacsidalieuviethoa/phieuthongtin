@@ -6,8 +6,6 @@
     <title>THÔNG TIN TÓC</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="zalo-block.js"></script>
-
     <link
         href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&family=Montserrat:wght@500;600&display=swap"
         rel="stylesheet">
@@ -377,6 +375,12 @@
         </div>
 
         <button onclick="kiemTraVaTaoAnh('TÓC')">TẠO ẢNH</button>
+
+        <div id="image-actions" hidden>
+            <button type="button" onclick="chiaSeAnh()">CHIA SẺ ẢNH</button>
+            <button type="button" onclick="taiAnhDaTao()">TẢI ẢNH XUỐNG</button>
+            <p id="image-status" role="status" aria-live="polite"></p>
+        </div>
 
         <button onclick="xoaDuLieu()">XOÁ THÔNG TIN</button>
 
