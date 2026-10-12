@@ -18,6 +18,28 @@ function kichHoatTaiAnh(fileName, imageUrl) {
     link.remove();
 }
 
+function taoTenFileAnh(tenKhachHang, loai) {
+    const tenAnToan = tenKhachHang
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/đ/gi, "d")
+        .replace(/[^a-zA-Z0-9]+/g, "_")
+        .replace(/^_+|_+$/g, "") || "Khach_hang";
+    const ngayGio = new Date();
+    const dinhDangSo = so => String(so).padStart(2, "0");
+    const mocThoiGian = [
+        ngayGio.getFullYear(),
+        dinhDangSo(ngayGio.getMonth() + 1),
+        dinhDangSo(ngayGio.getDate())
+    ].join("") + "_" + [
+        dinhDangSo(ngayGio.getHours()),
+        dinhDangSo(ngayGio.getMinutes()),
+        dinhDangSo(ngayGio.getSeconds())
+    ].join("");
+
+    return "Thong_tin_" + tenAnToan + "_" + loai + "_" + mocThoiGian + ".png";
+}
+
 function moHopThoaiChiaSe() {
     const dialogue = document.getElementById("image-share-dialog");
     if (!dialogue) {
@@ -288,7 +310,7 @@ function taoAnh(loai) {
 
         const imgData = canvas.toDataURL("image/png");
         duLieuAnhDaTao = imgData;
-        tenAnhDaTao = "Thong_tin_" + loai + ".png";
+        tenAnhDaTao = taoTenFileAnh(document.getElementById("q1").value.trim(), loai);
         anhDaTao = taoFileAnh(imgData, tenAnhDaTao);
 
         kichHoatTaiAnh(tenAnhDaTao, imgData);
