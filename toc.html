@@ -167,6 +167,23 @@
             resize: vertical;
         }
 
+        .field-error {
+            display: block;
+            margin-top: 6px;
+            color: #c62828;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        textarea[aria-invalid="true"] {
+            border-color: #c62828;
+            background: #fff5f5;
+        }
+
+        .field-error[hidden] {
+            display: none;
+        }
+
         textarea:focus,
         input:focus {
             outline: none;
@@ -217,6 +234,115 @@
 
         button:active {
             transform: scale(0.98);
+        }
+
+        .image-share-dialog {
+            --share-accent: #388e3c;
+            width: min(440px, calc(100% - 32px));
+            max-height: calc(100vh - 32px);
+            max-height: calc(100dvh - 32px);
+            padding: 28px;
+            border: 0;
+            border-radius: 24px;
+            overflow-y: auto;
+            color: #263238;
+            box-shadow: 0 24px 72px rgba(0, 0, 0, 0.28);
+        }
+
+        .image-share-dialog::backdrop {
+            background: rgba(16, 35, 40, 0.58);
+            backdrop-filter: blur(3px);
+        }
+
+        body.share-dialog-fallback::after {
+            position: fixed;
+            z-index: 1000;
+            background: rgba(16, 35, 40, 0.58);
+            content: "";
+            inset: 0;
+        }
+
+        .image-share-dialog.is-fallback-modal {
+            position: fixed;
+            z-index: 1001;
+            display: block;
+            margin: 0;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .share-dialog-icon {
+            display: grid;
+            width: 52px;
+            height: 52px;
+            margin-bottom: 18px;
+            place-items: center;
+            border-radius: 50%;
+            background: #e8f5e9;
+            color: var(--share-accent);
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .image-share-dialog h2 {
+            margin: 0 0 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            color: #25632a;
+        }
+
+        .image-share-dialog p {
+            margin: 0 0 14px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .image-share-dialog .share-privacy-note {
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: #f3f7f3;
+            color: #526552;
+            font-size: 13px;
+        }
+
+        .image-share-dialog button {
+            margin-top: 10px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            font-size: 15px;
+            box-shadow: none;
+        }
+
+        .image-share-dialog button::before {
+            display: none;
+        }
+
+        .image-share-dialog .share-primary {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+        }
+
+        .image-share-dialog .share-secondary,
+        .image-share-dialog .share-later {
+            border: 1px solid #d7e1d7;
+            background: #fff;
+            color: #38543a;
+        }
+
+        .image-share-dialog .share-later {
+            margin-top: 8px;
+            padding: 10px;
+            border: 0;
+            color: #687b69;
+            font-size: 14px;
+            box-shadow: none;
+        }
+
+        .image-share-dialog #image-status {
+            min-height: 0;
+            margin: 12px 0 0;
+            color: #526552;
+            font-size: 13px;
         }
 
         /* MOBILE OPTIMIZATIONS */
@@ -286,108 +412,123 @@
             </p>
 
             <label class="bat-buoc-label">
-                1. Họ và tên – Tuổi <span class="sao">*</span>
+                1. Họ và tên <span class="sao">*</span>
             </label>
-            <textarea id="q1" class="bat-buoc" placeholder="Ví dụ: Nguyễn Văn A – 28 tuổi"></textarea>
+            <textarea id="q1" class="bat-buoc" placeholder="VD: Nguyễn Văn A" aria-describedby="q1-error"></textarea>
             <small class="note-bat-buoc">Thông tin bắt buộc</small>
-
-            <label>2. Nghề nghiệp hiện tại (kể cả công việc làm thêm)</label>
-            <textarea id="q2"></textarea>
+            <small class="field-error" id="q1-error" role="alert" hidden></small>
 
             <label class="bat-buoc-label">
-                3. Số điện thoại liên hệ <span class="sao">*</span>
+                2. Tuổi <span class="sao">*</span>
             </label>
-            <textarea id="q3" class="bat-buoc" placeholder="09xxxxxxxx"></textarea>
+            <textarea id="age" class="bat-buoc" placeholder="Nhập số tuổi (VD: 28)" inputmode="numeric" aria-describedby="age-error"></textarea>
             <small class="note-bat-buoc">Thông tin bắt buộc</small>
+            <small class="field-error" id="age-error" role="alert" hidden></small>
+
+            <label>3. Nghề nghiệp hiện tại (kể cả công việc làm thêm)</label>
+            <textarea id="q2" placeholder="VD: Nhân viên văn phòng; công việc làm thêm (nếu có)"></textarea>
 
             <label class="bat-buoc-label">
-                4. Ngày tháng năm sinh <span class="sao">*</span>
+                4. Số điện thoại liên hệ <span class="sao">*</span>
             </label>
-            <textarea id="q4" class="bat-buoc"></textarea>
+            <textarea id="q3" class="bat-buoc" placeholder="10 chữ số, bắt đầu bằng 0 (VD: 0912345678)" inputmode="numeric" aria-describedby="q3-error"></textarea>
             <small class="note-bat-buoc">Thông tin bắt buộc</small>
-            <label>5. Địa chỉ thường trú</label>
-            <textarea id="q5"></textarea>
+            <small class="field-error" id="q3-error" role="alert" hidden></small>
 
-            <label>6. Lý do đi khám tóc / da đầu</label>
-            <textarea id="q6" placeholder="Rụng tóc, hói đầu, ngứa da đầu..."></textarea>
+            <label class="bat-buoc-label">
+                5. Ngày tháng năm sinh <span class="sao">*</span>
+            </label>
+            <textarea id="q4" class="bat-buoc" placeholder="DD/MM/YYYY (VD: 15/08/1995)" aria-describedby="q4-error"></textarea>
+            <small class="note-bat-buoc">Thông tin bắt buộc</small>
+            <small class="field-error" id="q4-error" role="alert" hidden></small>
+            <label>6. Địa chỉ thường trú</label>
+            <textarea id="q5" placeholder="Số nhà, đường, phường/xã, tỉnh/thành (nếu tiện cung cấp)"></textarea>
 
-            <label>7. Có mang thai / cho con bú / dự định mang thai trong 6 tháng?</label>
-            <textarea id="q7"></textarea>
+            <label>7. Lý do đi khám tóc / da đầu</label>
+            <textarea id="q6" placeholder="Vấn đề chính, vị trí, bắt đầu từ khi nào (VD: tóc rụng nhiều vùng trán khoảng 3 tháng)"></textarea>
 
-            <label>8. Có bệnh buồng trứng đa nang hoặc tuyến giáp không?</label>
-            <textarea id="q8"></textarea>
+            <label>8. Có mang thai / cho con bú / dự định mang thai trong 6 tháng?</label>
+            <textarea id="q7" placeholder="VD: Không; đang mang thai tuần ..., đang cho con bú; hoặc dự định trong ... tháng"></textarea>
 
-            <label>9. Có mất ngủ hoặc tiền sử bệnh tâm thần kinh vd: trầm cảm, lo âu?</label>
-            <textarea id="q9"></textarea>
+            <label>9. Có bệnh buồng trứng đa nang hoặc tuyến giáp không?</label>
+            <textarea id="q8" placeholder="Nếu có: tình trạng đã được chẩn đoán (nếu biết), thời điểm và điều trị hiện tại"></textarea>
 
-            <label>10. Hiện tại có mắc bệnh gì không, có đang uống thuốc điều trị bệnh nào không?</label>
-            <textarea id="q10"></textarea>
+            <label>10. Có mất ngủ hoặc tiền sử bệnh tâm thần kinh vd: trầm cảm, lo âu?</label>
+            <textarea id="q9" placeholder="Nếu có: tình trạng/triệu chứng, thời gian xuất hiện và điều trị hiện tại (nếu có)"></textarea>
 
-            <label>11. Có bệnh lý về máu, thiếu máu, máu chảy không đông không?</label>
-            <textarea id="q11" placeholder="Chảy máu răng, đi cầu ra máu, rong kinh, xuất huyết dưới da,..."></textarea>
+            <label>11. Hiện tại có mắc bệnh gì không, có đang uống thuốc điều trị bệnh nào không?</label>
+            <textarea id="q10" placeholder="Tên bệnh đã được chẩn đoán; thuốc đang dùng, liều dùng và thời gian dùng (nếu biết)"></textarea>
 
-            <label>12. Có rối loạn chức năng gan - thận - mỡ máu - đường máu không?</label>
-            <textarea id="q12"></textarea>
+            <label>12. Có bệnh lý về máu, thiếu máu, máu chảy không đông không?</label>
+            <textarea id="q11" placeholder="Nếu có: chẩn đoán đã biết hoặc biểu hiện, thời điểm và điều trị (VD: dễ bầm/chảy máu kéo dài)"></textarea>
 
-            <label>13. Trong gia đình có ai mắc bệnh giống mình không?</label>
-            <textarea id="q13"></textarea>
+            <label>13. Có rối loạn chức năng gan - thận - mỡ máu - đường máu không?</label>
+            <textarea id="q12" placeholder="Nếu có: bệnh/tình trạng đã được chẩn đoán, thời điểm và thuốc đang dùng (nếu có)"></textarea>
 
-            <label>14. Trước đây hoặc hiện tại có dùng thuốc bổ không?</label>
-            <textarea id="q14" placeholder="Kẽm, sắt, vitamin,...."></textarea>
+            <label>14. Trong gia đình có ai mắc bệnh giống mình không?</label>
+            <textarea id="q13" placeholder="Nếu có: người thân nào và tình trạng/bệnh gì (không cần ghi tên)"></textarea>
 
-            <label>15. Có thường xuyên ăn nhiều đồ ngọt, béo, sữa và các chế phẩm từ sữa không?</label>
-            <textarea id="q15"></textarea>
+            <label>15. Trước đây hoặc hiện tại có dùng thuốc bổ không?</label>
+            <textarea id="q14" placeholder="Tên vitamin/thực phẩm bổ sung, liều nếu nhớ, thời gian dùng và còn dùng không"></textarea>
 
-            <label>16. Có hay tnức khuya, stress, chất kích thích, vd: rượu bia, thuốc lá?</label>
-            <textarea id="q16"></textarea>
+            <label>16. Có thường xuyên ăn nhiều đồ ngọt, béo, sữa và các chế phẩm từ sữa không?</label>
+            <textarea id="q15" placeholder="Mức độ/tần suất và thực phẩm thường dùng; ghi nhận nếu thấy liên quan đến triệu chứng"></textarea>
 
-            <label>17. Có sử dụng bột tăng cơ / thực phẩm thể hình trước đây hoặc hiện tại không?</label>
-            <textarea id="q17"></textarea>
+            <label>17. Có hay tnức khuya, stress, chất kích thích, vd: rượu bia, thuốc lá?</label>
+            <textarea id="q16" placeholder="VD: giờ ngủ thường ngày; tình trạng căng thẳng; rượu bia/thuốc lá và tần suất (nếu có)"></textarea>
 
-            <label>18. Đã từng điều trị tóc / da đầu chưa? [điều trị bao nhiêu đợt, mỗi đợt thời gian bao lâu]. Hiện tại
+            <label>18. Có sử dụng bột tăng cơ / thực phẩm thể hình trước đây hoặc hiện tại không?</label>
+            <textarea id="q17" placeholder="Tên sản phẩm/thành phần nếu biết, thời gian sử dụng và hiện còn dùng không"></textarea>
+
+            <label>19. Đã từng điều trị tóc / da đầu chưa? [điều trị bao nhiêu đợt, mỗi đợt thời gian bao lâu]. Hiện tại
                 đang điều trị hay ngừng [nếu đã ngừng thì ngừng bao lâu]?</label>
-            <textarea id="q18"></textarea>
+            <textarea id="q18" placeholder="Phương pháp/sản phẩm/thuốc nếu nhớ, số đợt và thời gian; lần điều trị gần nhất, còn điều trị không"></textarea>
         </div>
 
         <div class="section">
             <h3>II. KHÁM (KHÁCH HÀNG TỰ TRẢ LỜI)</h3>
 
-            <label>19. Da đầu có ngứa không? [vị trí ngứa, ngứa ban ngày hay ban đêm, xuất hiện bao lâu]</label>
-            <textarea id="q19"></textarea>
+            <label>20. Da đầu có ngứa không? [vị trí ngứa, ngứa ban ngày hay ban đêm, xuất hiện bao lâu]</label>
+            <textarea id="q19" placeholder="Vị trí, thời điểm/tần suất, bắt đầu từ khi nào; yếu tố làm tăng/giảm nếu nhận thấy"></textarea>
 
-            <label>20. Da đầu có đau, bỏng rát không?</label>
-            <textarea id="q20"></textarea>
+            <label>21. Da đầu có đau, bỏng rát không?</label>
+            <textarea id="q20" placeholder="Vị trí, mức độ, bắt đầu từ khi nào và có liên quan đến sản phẩm/thủ thuật nào không"></textarea>
 
-            <label>21. Da đầu có gàu hoặc khô, bong tróc không?</label>
-            <textarea id="q21"></textarea>
+            <label>22. Da đầu có gàu hoặc khô, bong tróc không?</label>
+            <textarea id="q21" placeholder="Vị trí, mức độ, thời gian xuất hiện và sản phẩm chăm sóc đang dùng (nếu có)"></textarea>
 
-            <label>22. Vị trí rụng tóc, rụng nhiều ở vùng nào, rụng theo mảng hay xen kẽ?</label>
-            <textarea id="q22"></textarea>
+            <label>23. Vị trí rụng tóc, rụng nhiều ở vùng nào, rụng theo mảng hay xen kẽ?</label>
+            <textarea id="q22" placeholder="Vùng rụng, rụng thành mảng hay thưa đều, bắt đầu từ khi nào"></textarea>
 
-            <label>23. Mức độ rụng tóc ít hay nhiều?</label>
-            <textarea id="q23"></textarea>
+            <label>24. Mức độ rụng tóc ít hay nhiều?</label>
+            <textarea id="q23" placeholder="Ước lượng mức độ, diễn tiến tăng/giảm và thời gian rụng (nếu nhớ)"></textarea>
 
-            <label>24. Có vuốt, kéo tóc hoặc đội mũ thường xuyên không?</label>
-            <textarea id="q24"></textarea>
+            <label>25. Có vuốt, kéo tóc hoặc đội mũ thường xuyên không?</label>
+            <textarea id="q24" placeholder="Kiểu tóc/tác động thường gặp và tần suất (VD: buộc tóc chặt hằng ngày)"></textarea>
 
-            <label>25. Có theo chế độ ăn kiêng hoặc kiêng thực phẩm nào không?</label>
-            <textarea id="q25"></textarea>
+            <label>26. Có theo chế độ ăn kiêng hoặc kiêng thực phẩm nào không?</label>
+            <textarea id="q25" placeholder="Thực phẩm/nhóm thực phẩm đang kiêng, lý do và thời gian áp dụng"></textarea>
         </div>
 
         <button onclick="kiemTraVaTaoAnh('TÓC')">TẠO ẢNH</button>
-
-        <div id="image-actions" hidden>
-            <button type="button" onclick="chiaSeAnh()">CHIA SẺ ẢNH</button>
-            <button type="button" onclick="taiAnhDaTao()">TẢI ẢNH XUỐNG</button>
-            <p id="image-status" role="status" aria-live="polite"></p>
-        </div>
 
         <button onclick="xoaDuLieu()">XOÁ THÔNG TIN</button>
 
     </div>
 
+    <dialog id="image-share-dialog" class="image-share-dialog" aria-labelledby="image-share-title">
+        <div class="share-dialog-icon" aria-hidden="true">✓</div>
+        <h2 id="image-share-title">Phiếu của bạn đã sẵn sàng</h2>
+        <p>Chia sẻ phiếu với phòng khám qua Zalo hoặc Messenger để bác sĩ tham khảo thông tin trước buổi khám và chuẩn bị tư vấn phù hợp hơn.</p>
+        <!-- <p class="share-privacy-note">Phiếu có thông tin cá nhân và sức khỏe. Chỉ chia sẻ khi bạn đồng ý.</p> -->
+        <button type="button" class="share-primary" onclick="chiaSeAnh()">CHIA SẺ PHIẾU CHO PHÒNG KHÁM</button>
+        <button type="button" class="share-secondary" onclick="taiAnhDaTao()">TẢI ẢNH XUỐNG</button>
+        <button type="button" class="share-later" onclick="dongHopThoaiChiaSe()">ĐỂ SAU</button>
+        <p id="image-status" role="status" aria-live="polite"></p>
+    </dialog>
+
     <canvas id="canvas" width="1080" height="1600" hidden></canvas>
-    <script src="script.js"></script>
+    <script src="script.js?v=20261011"></script>
 
 </body>
 

@@ -11,9 +11,9 @@ Repository không có backend, hệ thống đăng nhập, cấu hình build/pac
 | File | Vai trò |
 | --- | --- |
 | `index.html` | Trang chủ thương hiệu, hiển thị lựa chọn điền phiếu **Da** (`da.html`) hoặc **Tóc** (`toc.html`). CSS của trang được viết trực tiếp trong file. |
-| `da.html` | Biểu mẫu da gồm 30 câu, chia thông tin chung và tình trạng da. Các câu 1, 3, 4 được đánh dấu bắt buộc; có nút tạo ảnh, chia sẻ ảnh, tải ảnh và xóa dữ liệu. Chứa CSS nội tuyến và tải `script.js`. |
-| `toc.html` | Biểu mẫu tóc gồm 25 câu, chia thông tin chung và tình trạng tóc/da đầu. Các câu 1, 3, 4 được đánh dấu bắt buộc; có nút tạo ảnh, chia sẻ ảnh, tải ảnh và xóa dữ liệu. Chứa CSS nội tuyến và tải `script.js`. |
-| `script.js` | Dùng chung cho hai biểu mẫu: kiểm tra các câu bắt buộc, vẽ câu hỏi/câu trả lời cùng logo lên Canvas, tự tải PNG xuống sau khi tạo, cung cấp nút tải lại và chia sẻ ảnh qua Web Share API. Đồng thời tự lưu và phục hồi câu trả lời. |
+| `da.html` | Biểu mẫu da gồm 30 câu hiện có và một trường tuổi tách riêng, chia thông tin chung và tình trạng da. Họ tên và tuổi là hai trường riêng; cùng với số điện thoại và ngày sinh, đây là các trường bắt buộc. Các câu có placeholder hướng dẫn trả lời trung lập. Có popup sau khi tạo ảnh với lựa chọn chia sẻ, tải ảnh và để sau. |
+| `toc.html` | Biểu mẫu tóc gồm 25 câu hiện có và một trường tuổi tách riêng, chia thông tin chung và tình trạng tóc/da đầu. Họ tên và tuổi là hai trường riêng; cùng với số điện thoại và ngày sinh, đây là các trường bắt buộc. Các câu có placeholder hướng dẫn trả lời trung lập. Có popup sau khi tạo ảnh với lựa chọn chia sẻ, tải ảnh và để sau. |
+| `script.js` | Dùng chung cho hai biểu mẫu: kiểm tra họ tên, tuổi, số điện thoại và ngày sinh; vẽ câu trả lời lên Canvas, tự tải PNG xuống và mở popup chia sẻ. Đồng thời tự lưu và phục hồi câu trả lời. |
 | `style.css` | Các quy tắc CSS tổng quát cho giao diện lựa chọn và biểu mẫu. Không thấy trang HTML hiện tại nào liên kết file này; giao diện đang dùng CSS nội tuyến trong từng trang. |
 | `images/logo.png` | Logo, dùng ở các trang và được vẽ vào ảnh phiếu. |
 | `images/header-bg.jpg` | Ảnh nền phần đầu trang chủ. |
@@ -25,16 +25,18 @@ Repository không có backend, hệ thống đăng nhập, cấu hình build/pac
 
 1. Người dùng mở `index.html`, chọn phiếu da hoặc tóc.
 2. Trang không chuyển hướng hoặc chặn người dùng dựa trên User-Agent; có thể mở trong trình duyệt thường hoặc trình duyệt nhúng của ứng dụng nhắn tin.
-3. Câu trả lời được lưu theo ID ô nhập (`q1`, `q2`, ...) vào `localStorage` trong lúc nhập và được điền lại khi mở trang tương ứng.
-4. Nút **TẠO ẢNH** yêu cầu có nội dung ở `q1`, `q3`, `q4`, sau đó vẽ phiếu lên Canvas và yêu cầu tải xuống `Thong_tin_DA.png` hoặc `Thong_tin_TÓC.png`. Sau khi tạo, có thêm nút **CHIA SẺ ẢNH** và **TẢI ẢNH XUỐNG**.
-5. Chia sẻ dùng Web Share API của trình duyệt, nếu hỗ trợ chia sẻ tệp; khách chọn Zalo, Messenger hoặc ứng dụng khác từ bảng chia sẻ. Nếu không hỗ trợ, nút chia sẻ chuyển sang tải ảnh xuống.
-6. Nút **XOÁ THÔNG TIN** gọi `localStorage.clear()` rồi tải lại trang.
+3. Câu trả lời được lưu theo ID ô nhập (`q1`, `q2`, ... và `age`) vào `localStorage` trong lúc nhập và được điền lại khi mở trang. `q1` là họ tên, `age` là tuổi; các ID câu hỏi còn lại được giữ nguyên. URL script có phiên bản để trình duyệt tải bản cập nhật thay vì tiếp tục dùng JavaScript cũ trong cache.
+4. Placeholder nêu ví dụ/trường thông tin hữu ích cho mỗi câu hỏi bệnh sử và triệu chứng; nội dung gợi ý khuyến khích mô tả điều người dùng biết, không tự kết luận chẩn đoán.
+5. Trước khi tạo ảnh, họ tên (`q1`) phải có ít nhất 2 ký tự và tuổi (`age`) không được để trống, phải là số từ 0 đến 120. `q3` phải là 10 chữ số bắt đầu bằng 0, còn `q4` phải là ngày hợp lệ dạng `DD/MM/YYYY` không nằm trong tương lai. Lỗi hiển thị ngay dưới trường tương ứng, khi rời trường hoặc bấm **TẠO ẢNH**; người dùng phải sửa trước khi tiếp tục. Dữ liệu cũ ở `q1` theo dạng “Họ tên – 28 tuổi” được tự tách khi mở trang nếu chưa có giá trị tuổi đã lưu.
+6. Nút **TẠO ẢNH** sau khi vượt kiểm tra sẽ vẽ phiếu lên Canvas, yêu cầu tải xuống `Thong_tin_DA.png` hoặc `Thong_tin_TÓC.png` và mở popup chia sẻ.
+7. Popup giải thích việc gửi phiếu tới phòng khám là tùy chọn, rồi cho khách chia sẻ qua Web Share API, tải ảnh xuống lần nữa hoặc chọn **ĐỂ SAU**. Khi có hỗ trợ chia sẻ tệp, khách chọn Zalo, Messenger hoặc ứng dụng khác từ bảng chia sẻ; nếu không hỗ trợ, thao tác chia sẻ chuyển sang tải ảnh xuống. Popup dùng hộp thoại HTML gốc khi trình duyệt hỗ trợ và có phương án hiển thị thay thế cho trình duyệt cũ.
+8. Nút **XOÁ THÔNG TIN** gọi `localStorage.clear()` rồi tải lại trang.
 
 ## Mở trang từ Zalo/Messenger và chia sẻ ảnh
 
 Trước đây, `zalo-block.js` dùng User-Agent để chuyển một số trình duyệt nhúng sang `zalo-block.html`. Điều kiện không riêng cho iPhone hoặc Zalo: nó cũng khớp Android WebView và một số trình duyệt nhúng iPhone. Mục đích thể hiện trong trang hướng dẫn là yêu cầu dùng trình duyệt ngoài để tạo/tải ảnh, nhưng cách này khiến người dùng không vào được biểu mẫu ngay trong ứng dụng nhắn tin và không khôi phục URL form sau khi chuyển.
 
-Hai file chặn đã được gỡ khỏi luồng website để link mở trực tiếp trên các thiết bị và ứng dụng. Việc tạo ảnh không tự gửi dữ liệu đi đâu: khách có thể dùng bảng chia sẻ của điện thoại để tự chọn người nhận. Khả năng chia sẻ file tùy thuộc trình duyệt và môi trường nhúng; vì vậy form vẫn yêu cầu tải ảnh tự động sau khi tạo và có nút tải ảnh riêng làm phương án dự phòng. Nếu trình duyệt không hỗ trợ Web Share API cho file, nút chia sẻ cũng chuyển sang tải ảnh xuống.
+Hai file chặn đã được gỡ khỏi luồng website để link mở trực tiếp trên các thiết bị và ứng dụng. Việc tạo ảnh không tự gửi dữ liệu đi đâu: khách có thể dùng popup và bảng chia sẻ của điện thoại để tự chọn người nhận; nội dung popup nhấn mạnh chỉ chia sẻ khi khách đồng ý. Khả năng chia sẻ file tùy thuộc trình duyệt và môi trường nhúng; vì vậy form vẫn yêu cầu tải ảnh tự động sau khi tạo và có lựa chọn tải riêng trong popup. Nếu trình duyệt không hỗ trợ Web Share API cho file, thao tác chia sẻ cũng chuyển sang tải ảnh xuống.
 
 ## Lưu ý về dữ liệu và kỹ thuật
 

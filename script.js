@@ -6,10 +6,6 @@ function hienThiTrangThaiAnh(thongBao) {
     const trangThai = document.getElementById("image-status");
     if (trangThai) {
         trangThai.textContent = thongBao;
-        const imageActions = document.getElementById("image-actions");
-        if (imageActions) {
-            imageActions.hidden = false;
-        }
     }
 }
 
@@ -20,6 +16,53 @@ function kichHoatTaiAnh(fileName, imageUrl) {
     document.body.appendChild(link);
     link.click();
     link.remove();
+}
+
+function moHopThoaiChiaSe() {
+    const dialogue = document.getElementById("image-share-dialog");
+    if (!dialogue) {
+        return;
+    }
+
+    if (typeof dialogue.showModal === "function") {
+        try {
+            dialogue.showModal();
+            return;
+        } catch (error) {
+            // Fall back to an in-page modal if native dialog opening is unavailable.
+        }
+    }
+
+    dialogue.classList.add("is-fallback-modal");
+    document.body.classList.add("share-dialog-fallback");
+    dialogue.setAttribute("open", "");
+    if (!dialogue.dataset.escapeHandlerAdded) {
+        dialogue.addEventListener("keydown", event => {
+            if (event.key === "Escape" &&
+                dialogue.classList.contains("is-fallback-modal")) {
+                event.preventDefault();
+                dongHopThoaiChiaSe();
+            }
+        });
+        dialogue.dataset.escapeHandlerAdded = "true";
+    }
+    const shareButton = dialogue.querySelector(".share-primary");
+    if (shareButton) {
+        shareButton.focus();
+    }
+}
+
+function dongHopThoaiChiaSe() {
+    const dialogue = document.getElementById("image-share-dialog");
+    if (dialogue && dialogue.open) {
+        if (dialogue.classList.contains("is-fallback-modal")) {
+            dialogue.classList.remove("is-fallback-modal");
+            document.body.classList.remove("share-dialog-fallback");
+            dialogue.removeAttribute("open");
+        } else {
+            dialogue.close();
+        }
+    }
 }
 
 function taoFileAnh(dataUrl, fileName) {
@@ -81,7 +124,7 @@ async function chiaSeAnh() {
             files: [anhDaTao],
             title: "Phiếu thông tin khách hàng"
         });
-        hienThiTrangThaiAnh("Đã mở bảng chia sẻ. Chọn Zalo, Messenger hoặc ứng dụng bạn muốn gửi ảnh.");
+        dongHopThoaiChiaSe();
     } catch (error) {
         if (error && error.name === "AbortError") {
             hienThiTrangThaiAnh("Đã hủy chia sẻ. Ảnh vẫn có thể tải xuống bằng nút bên dưới.");
@@ -97,7 +140,8 @@ function taoAnh(loai) {
 
     const cauHoi = {
         "TÓC": [
-            "Họ và tên – Tuổi",
+            "Họ và tên",
+            "Tuổi",
             "Nghề nghiệp hiện tại (kể cả công việc làm thêm)",
             "Số điện thoại liên hệ",
             "Ngày tháng năm sinh",
@@ -124,7 +168,8 @@ function taoAnh(loai) {
             "Có theo chế độ ăn kiêng hoặc kiêng thực phẩm nào không?"
         ],
         "DA": [
-            "Họ và tên – Tuổi",
+            "Họ và tên",
+            "Tuổi",
             "Nghề nghiệp hiện tại",
             "Số điện thoại liên hệ",
             "Ngày tháng năm sinh",
@@ -157,11 +202,16 @@ function taoAnh(loai) {
         ]
     };
 
-    const numQuestions = loai === "DA" ? 30 : 25;
+    const numQuestions = cauHoi[loai].length;
     const answers = [];
-    for (let i = 1; i <= numQuestions; i++) {
+    for (let i = 1; i <= numQuestions - 1; i++) {
         const el = document.getElementById("q" + i);
-        answers.push(el && el.value.trim() !== "" ? el.value.trim() : "—");
+        const answer = el && el.value.trim() !== "" ? el.value.trim() : "—";
+        answers.push(answer);
+        if (i === 1) {
+            const age = document.getElementById("age").value.trim();
+            answers.push(age || "—");
+        }
     }
 
     /* ===== TÍNH CHIỀU CAO ẢNH ===== */
@@ -242,13 +292,9 @@ function taoAnh(loai) {
         tenAnhDaTao = "Thong_tin_" + loai + ".png";
         anhDaTao = taoFileAnh(imgData, tenAnhDaTao);
 
-        const imageActions = document.getElementById("image-actions");
-        if (imageActions) {
-            imageActions.hidden = false;
-        }
-
         kichHoatTaiAnh(tenAnhDaTao, imgData);
-        hienThiTrangThaiAnh("Đã tạo ảnh. Nếu chưa thấy ảnh tải xuống, hãy dùng nút TẢI ẢNH XUỐNG hoặc CHIA SẺ ẢNH.");
+        hienThiTrangThaiAnh("Ảnh đã sẵn sàng. Chọn chia sẻ với phòng khám hoặc tải ảnh xuống thêm lần nữa nếu cần.");
+        moHopThoaiChiaSe();
 
     };
 
@@ -258,46 +304,84 @@ function taoAnh(loai) {
 }
 
 function kiemTraVaTaoAnh(loai) {
-    const batBuoc = ["q1", "q3", "q4"];
+    const batBuoc = ["q1", "age", "q3", "q4"];
 
     for (let i = 0; i < batBuoc.length; i++) {
         const el = document.getElementById(batBuoc[i]);
+        const thongBaoLoi = kiemTraDinhDangTruong(el.id);
+        hienThiLoiTruong(el, thongBaoLoi);
 
-        if (!el.value.trim()) {
-
-            // Viền đỏ rõ ràng
-            el.style.border = "2.5px solid #e53935";
-            el.style.background = "#fff1f1";
-
-            // Cuộn mượt đến câu hỏi bị thiếu
+        if (thongBaoLoi) {
             el.scrollIntoView({
                 behavior: "smooth",
                 block: "center"
             });
-
-            // Focus vào ô nhập
             el.focus();
-
-            // Rung nhẹ để gây chú ý
-            el.animate([
-                { transform: "translateX(0)" },
-                { transform: "translateX(-5px)" },
-                { transform: "translateX(5px)" },
-                { transform: "translateX(0)" }
-            ], {
-                duration: 300
-            });
-
-            return; // ❌ DỪNG KHÔNG TẠO ẢNH
-        } else {
-            // Xoá viền lỗi nếu đã nhập
-            el.style.border = "";
-            el.style.background = "";
+            if (typeof el.animate === "function") {
+                el.animate([
+                    { transform: "translateX(0)" },
+                    { transform: "translateX(-5px)" },
+                    { transform: "translateX(5px)" },
+                    { transform: "translateX(0)" }
+                ], { duration: 300 });
+            }
+            return;
         }
     }
 
-    // ✅ TẤT CẢ CÂU BẮT BUỘC ĐÃ ĐIỀN → TẠO ẢNH
     taoAnh(loai);
+}
+
+function kiemTraDinhDangTruong(id) {
+    const el = document.getElementById(id);
+    const value = el.value.trim();
+    if (!value) {
+        return "Đây là mục bắt buộc. Vui lòng nhập thông tin.";
+    }
+
+    if (id === "q1" && value.length < 2) {
+        return "Họ và tên cần có ít nhất 2 ký tự.";
+    }
+
+    if (id === "age" && (!/^\d{1,3}$/.test(value) || Number(value) > 120)) {
+        return "Nhập tuổi bằng số từ 0 đến 120 (VD: 28).";
+    }
+
+    if (id === "q3" && !/^0\d{9}$/.test(value)) {
+        return "Số điện thoại cần gồm 10 chữ số và bắt đầu bằng 0 (VD: 0912345678).";
+    }
+
+    if (id === "q4") {
+        const match = value.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+        if (!match) {
+            return "Nhập ngày sinh theo định dạng DD/MM/YYYY (VD: 15/08/1995).";
+        }
+
+        const day = Number(match[1]);
+        const month = Number(match[2]);
+        const year = Number(match[3]);
+        const birthDate = new Date(year, month - 1, day);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (birthDate.getFullYear() !== year ||
+            birthDate.getMonth() !== month - 1 ||
+            birthDate.getDate() !== day ||
+            birthDate > today) {
+            return "Ngày sinh không hợp lệ hoặc nằm trong tương lai.";
+        }
+    }
+
+    return "";
+}
+
+function hienThiLoiTruong(el, thongBao) {
+    const errorMessage = document.getElementById(el.id + "-error");
+    el.setAttribute("aria-invalid", thongBao ? "true" : "false");
+    if (errorMessage) {
+        errorMessage.textContent = thongBao;
+        errorMessage.hidden = !thongBao;
+    }
 }
 
 // ===============================
@@ -308,13 +392,32 @@ const tatCaCauHoi = document.querySelectorAll("textarea, input");
 tatCaCauHoi.forEach(el => {
     el.addEventListener("input", () => {
         localStorage.setItem(el.id, el.value);
+        if (el.classList.contains("bat-buoc") &&
+            el.getAttribute("aria-invalid") === "true") {
+            hienThiLoiTruong(el, kiemTraDinhDangTruong(el.id));
+        }
     });
+
+    if (el.classList.contains("bat-buoc")) {
+        el.addEventListener("blur", () => {
+            hienThiLoiTruong(el, kiemTraDinhDangTruong(el.id));
+        });
+    }
 });
 
 // ===============================
 // PHỤC HỒI DỮ LIỆU KHI MỞ TRANG
 // ===============================
 window.addEventListener("load", () => {
+    const oldNameAndAge = localStorage.getItem("q1");
+    if (!localStorage.getItem("age") && oldNameAndAge) {
+        const match = oldNameAndAge.match(/^(.+?)\s*[–-]\s*(\d{1,3})\s*tuổi$/i);
+        if (match && Number(match[2]) <= 120) {
+            localStorage.setItem("q1", match[1].trim());
+            localStorage.setItem("age", match[2]);
+        }
+    }
+
     tatCaCauHoi.forEach(el => {
         const savedValue = localStorage.getItem(el.id);
         if (savedValue !== null) {
