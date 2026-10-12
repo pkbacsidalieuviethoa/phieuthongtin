@@ -114,15 +114,15 @@ async function chiaSeAnh() {
     }
 
     if (!coTheChiaSeTep) {
-        taiAnhDaTao();
-        hienThiTrangThaiAnh("Trình duyệt này chưa hỗ trợ chia sẻ ảnh trực tiếp. Đã chuyển sang tải ảnh xuống.");
+        hienThiTrangThaiAnh("Trình duyệt này chưa hỗ trợ chia sẻ ảnh trực tiếp. Hãy chọn TẢI ẢNH XUỐNG; trên điện thoại, bạn có thể mở ảnh đã tải trong Ảnh/Thư viện để chia sẻ.");
         return;
     }
 
     try {
         await navigator.share({
             files: [anhDaTao],
-            title: "Phiếu thông tin khách hàng"
+            title: "Phiếu thông tin khách hàng",
+            text: "Phiếu thông tin khách hàng"
         });
         dongHopThoaiChiaSe();
     } catch (error) {
@@ -131,8 +131,7 @@ async function chiaSeAnh() {
             return;
         }
 
-        hienThiTrangThaiAnh("Không thể chia sẻ ảnh trong trình duyệt này. Đang chuyển sang tải ảnh xuống.");
-        taiAnhDaTao();
+        hienThiTrangThaiAnh("Không thể chia sẻ ảnh trong trình duyệt này. Hãy thử mở trang bằng Chrome hoặc Safari, hoặc chọn TẢI ẢNH XUỐNG để chia sẻ từ Ảnh/Thư viện.");
     }
 }
 

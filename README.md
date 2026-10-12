@@ -29,14 +29,14 @@ Repository không có backend, hệ thống đăng nhập, cấu hình build/pac
 4. Placeholder nêu ví dụ/trường thông tin hữu ích cho mỗi câu hỏi bệnh sử và triệu chứng; nội dung gợi ý khuyến khích mô tả điều người dùng biết, không tự kết luận chẩn đoán.
 5. Trước khi tạo ảnh, họ tên (`q1`) phải có ít nhất 2 ký tự và tuổi (`age`) không được để trống, phải là số từ 0 đến 120. `q3` phải là 10 chữ số bắt đầu bằng 0, còn `q4` phải là ngày hợp lệ dạng `DD/MM/YYYY` không nằm trong tương lai. Lỗi hiển thị ngay dưới trường tương ứng, khi rời trường hoặc bấm **TẠO ẢNH**; người dùng phải sửa trước khi tiếp tục. Dữ liệu cũ ở `q1` theo dạng “Họ tên – 28 tuổi” được tự tách khi mở trang nếu chưa có giá trị tuổi đã lưu.
 6. Nút **TẠO ẢNH** sau khi vượt kiểm tra sẽ vẽ phiếu lên Canvas, yêu cầu tải xuống `Thong_tin_DA.png` hoặc `Thong_tin_TÓC.png` và mở popup chia sẻ.
-7. Popup giải thích việc gửi phiếu tới phòng khám là tùy chọn, rồi cho khách chia sẻ qua Web Share API, tải ảnh xuống lần nữa hoặc chọn **ĐỂ SAU**. Khi có hỗ trợ chia sẻ tệp, khách chọn Zalo, Messenger hoặc ứng dụng khác từ bảng chia sẻ; nếu không hỗ trợ, thao tác chia sẻ chuyển sang tải ảnh xuống. Popup dùng hộp thoại HTML gốc khi trình duyệt hỗ trợ và có phương án hiển thị thay thế cho trình duyệt cũ.
+7. Popup giải thích việc gửi phiếu tới phòng khám là tùy chọn, rồi cho khách chia sẻ qua Web Share API, tải ảnh xuống lần nữa hoặc chọn **ĐỂ SAU**. Khi có hỗ trợ chia sẻ tệp, khách chọn Zalo, Messenger hoặc ứng dụng khác từ bảng chia sẻ; nếu không hỗ trợ, popup hiện hướng dẫn tải ảnh và chia sẻ thủ công từ Ảnh/Thư viện. Popup dùng hộp thoại HTML gốc khi trình duyệt hỗ trợ và có phương án hiển thị thay thế cho trình duyệt cũ.
 8. Nút **XOÁ THÔNG TIN** gọi `localStorage.clear()` rồi tải lại trang.
 
 ## Mở trang từ Zalo/Messenger và chia sẻ ảnh
 
 Trước đây, `zalo-block.js` dùng User-Agent để chuyển một số trình duyệt nhúng sang `zalo-block.html`. Điều kiện không riêng cho iPhone hoặc Zalo: nó cũng khớp Android WebView và một số trình duyệt nhúng iPhone. Mục đích thể hiện trong trang hướng dẫn là yêu cầu dùng trình duyệt ngoài để tạo/tải ảnh, nhưng cách này khiến người dùng không vào được biểu mẫu ngay trong ứng dụng nhắn tin và không khôi phục URL form sau khi chuyển.
 
-Hai file chặn đã được gỡ khỏi luồng website để link mở trực tiếp trên các thiết bị và ứng dụng. Việc tạo ảnh không tự gửi dữ liệu đi đâu: khách có thể dùng popup và bảng chia sẻ của điện thoại để tự chọn người nhận; nội dung popup nhấn mạnh chỉ chia sẻ khi khách đồng ý. Khả năng chia sẻ file tùy thuộc trình duyệt và môi trường nhúng; vì vậy form vẫn yêu cầu tải ảnh tự động sau khi tạo và có lựa chọn tải riêng trong popup. Nếu trình duyệt không hỗ trợ Web Share API cho file, thao tác chia sẻ cũng chuyển sang tải ảnh xuống.
+Hai file chặn đã được gỡ khỏi luồng website để link mở trực tiếp trên các thiết bị và ứng dụng. Việc tạo ảnh không tự gửi dữ liệu đi đâu: khách có thể dùng popup và bảng chia sẻ của điện thoại để tự chọn người nhận; nội dung popup nhấn mạnh chỉ chia sẻ khi khách đồng ý. Khả năng chia sẻ file tùy thuộc trình duyệt và môi trường nhúng; vì vậy form vẫn yêu cầu tải ảnh tự động sau khi tạo và có lựa chọn tải riêng trong popup. Nếu trình duyệt không hỗ trợ Web Share API cho file, popup sẽ hướng dẫn tải ảnh và chia sẻ thủ công từ Ảnh/Thư viện.
 
 ## Lưu ý về dữ liệu và kỹ thuật
 
